@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Coordination Station</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2e3d2e;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #558b2f 0%, #689f38 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f1f8e9;
+            border-bottom: 3px solid #558b2f;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #558b2f;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: #dcedc8;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #558b2f;
+            margin-bottom: -3px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #558b2f;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: #689f38;
+            margin: 1.25rem 0 0.75rem 0;
+            font-size: 1.5rem;
+        }
+
+        h4 {
+            color: #7cb342;
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .values-box {
+            background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 6px solid #558b2f;
+            border-radius: 8px;
+        }
+
+        .values-box h3 {
+            margin-top: 0;
+            color: #558b2f;
+        }
+
+        .narrative-section {
+            background: #f9fbe7;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #689f38;
+        }
+
+        .narrative-section h3 {
+            margin-top: 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #558b2f 0%, #689f38 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-box .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .mead-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .mead-card {
+            background: #f1f8e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid #558b2f;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mead-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .mead-card h3 {
+            margin-top: 0;
+            color: #558b2f;
+        }
+
+        .mead-month {
+            color: #7cb342;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .mead-details {
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .mead-details strong {
+            color: #558b2f;
+        }
+
+        .calendar-month {
+            background: white;
+            border: 2px solid #c5e1a5;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .calendar-month h3 {
+            margin-top: 0;
+            color: #558b2f;
+        }
+
+        .calendar-month .date {
+            color: #689f38;
+            font-weight: 600;
+        }
+
+        .pairing-list {
+            background: #f9fbe7;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+
+        .pairing-list ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .highlight-box {
+            background: #fff9c4;
+            border-left: 4px solid #fbc02d;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: #f57f17;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table th {
+            background: #558b2f;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        table tr:hover {
+            background: #f9fbe7;
+        }
+
+        ul {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        /* Knowledge Base Styles */
+        .kb-layout {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .kb-sidebar {
+            width: 280px;
+            background: #f1f8e9;
+            border-right: 2px solid #c5e1a5;
+            padding: 20px 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .kb-accordion-section {
+            margin-bottom: 10px;
+        }
+
+        .kb-accordion-header {
+            background: #558b2f;
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .kb-accordion-header:hover {
+            background: #689f38;
+        }
+
+        .kb-accordion-header.active {
+            background: #689f38;
+        }
+
+        .kb-accordion-icon {
+            transition: transform 0.2s;
+        }
+
+        .kb-accordion-header.active .kb-accordion-icon {
+            transform: rotate(90deg);
+        }
+
+        .kb-accordion-content {
+            display: none;
+            background: #f7fafc;
+        }
+
+        .kb-accordion-content.active {
+            display: block;
+        }
+
+        .kb-nav-link {
+            display: block;
+            padding: 10px 20px;
+            color: #2d3748;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .kb-nav-link:hover {
+            background: #dcedc8;
+            padding-left: 25px;
+        }
+
+        .kb-nav-link.active {
+            background: linear-gradient(135deg, #558b2f 0%, #689f38 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .kb-content {
+            flex: 1;
+            padding: 20px 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .kb-page {
+            display: none;
+        }
+
+        .kb-page.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .kb-stats-bar {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #558b2f 0%, #689f38 100%);
+            border-radius: 12px;
+            color: white;
+            flex-wrap: wrap;
+        }
+
+        .kb-stat {
+            flex: 1;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .kb-stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .kb-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .kb-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .kb-info-card {
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #558b2f;
+        }
+
+        .kb-info-card h4 {
+            color: #558b2f;
+            margin-top: 0;
+        }
+
+        .kb-method-steps {
+            background: #f9fbe7;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .kb-method-steps ol {
+            margin-left: 20px;
+        }
+
+        .kb-method-steps li {
+            margin: 15px 0;
+            line-height: 1.7;
+        }
+
+        .kb-variety-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .kb-variety-item {
+            background: white;
+            border: 2px solid #c5e1a5;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .kb-variety-item:hover {
+            border-color: #558b2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(85, 139, 47, 0.2);
+        }
+
+        .kb-variety-item strong {
+            color: #558b2f;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .kb-variety-item span {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .coming-soon {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1 1 auto;
+                min-width: 120px;
+            }
+
+            .kb-layout {
+                flex-direction: column;
+            }
+
+            .kb-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #c5e1a5;
+                max-height: none;
+            }
+
+            .kb-stats-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .mead-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* Bootstrap nav overrides */
+        .navbar {
+            background: #f1f8e9 !important;
+            border-bottom: 3px solid #558b2f;
+            padding: 0;
+        }
+        
+        .navbar-nav {
+            flex-direction: row;
+            width: 100%;
+        }
+        
+        .nav-item {
+            margin: 0;
+        }
+        
+        .nav-item .tab, .nav-item .dropdown-toggle {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #558b2f !important;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-weight: 500;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .nav-item .tab:hover, .nav-item .dropdown-toggle:hover {
+            background: #dcedc8;
+        }
+        
+        .nav-item .tab.active {
+            background: white;
+            border-bottom: 3px solid #558b2f;
+            margin-bottom: -3px;
+        }
+        
+        .dropdown-menu {
+            background: white;
+            border: 1px solid #dcedc8;
+            border-top: 3px solid #558b2f;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .dropdown-item {
+            color: #558b2f;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        
+        .dropdown-item:hover {
+            background: #f1f8e9;
+            color: #558b2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MGKC Farm Coordinator Notebook</h1>
+        </header>
+        <!-- Nav -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid" style="padding: 0;">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="tab active" onclick="openTab('home', event)">Home</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="tab" onclick="openTab('overview', event)">Tikkun HaAdamah</button>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-toggle tab" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Planning Tools
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" onclick="openTab('garden-planner', event)">🌱 Garden Software Demo</button></li>
+                            <li><button class="dropdown-item" onclick="openTab('knowledge-base', event)">📚 Knowledge Base</button></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-toggle tab" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Programs
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" onclick="openTab('squads', event)">🤝 Volunteer Squads</button></li>
+                            <li><button class="dropdown-item" onclick="openTab('figs', event)">Yellow Fig Road</button></li>
+                            <li><button class="dropdown-item" onclick="openTab('home-garden', event)">Mitzvah Garden at Home</button></li>
+                            <li><button class="dropdown-item" onclick="openTab('calendar', event)">Brew Lunch Calendar</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- HOME TAB -->
+        <div id="home" class="tab-content active">
+<p>Welcome to the Coordination Station—this is where all the wild ideas live so they don't get lost in my brain. Huge thanks to Ken for trusting me to run with this mission, and massive shoutout to all our volunteers who helped us crush 11,756 pounds in our record-breaking 2025 season.</p>
+
+<p>But here's the thing: we're just getting warmed up. I genuinely think we can hit 50,000+ pounds in the next 3-5 years with an overall <em>decreased</em> workload (yeah, you read that right). This site is basically my brain dump of how we're gonna pull it off: transitioning to Tikkun HaAdamah (healing the soil through mulch and compost), organizing volunteers into flexible squads, and squeezing productivity out of every square foot we've got.</p>
+
+<p>The bigger goal? Inspire others across the Jewish garden network, our local KC community gardens, and home gardeners looking to grow their own hauls of fresh healthy food. And most importantly, educate the next generation on sustainable agriculture and working <em>with</em> creation instead of trying to dominate it.</p>
+<p>-Nick</p>
+<h2>Still Working on it:</h2>
+            <ul>
+                <li>Knowledgebase</li>
+                <li>Garden Software</li>
+                <li>Selecting squad Captains</li>
+                <li>new tab for Greenhouse operations</li>
+            </ul>
+                    <h2>Volunteers for the MGKC at home program</h2>
+        <ul>
+            <li>Emily</li>
+            <li>Stephanie</li>
+        </ul>
+        </div>
+
+        <!-- TIKKUN HAADAMAH TAB -->
+        <div id="overview" class="tab-content">
+            <h2>Mitzvah Garden: A Vision for Transformation</h2>
+            
+            <div class="values-box">
+                <h3>Our Values: Tikkun HaAdamah</h3>
+                <p>The Back to Eden method comes from a Christian framework, and while we give credit to that origin, our work here is rooted in Jewish values. We're calling our approach <strong>Tikkun HaAdamah</strong>—repairing the soil—because this is about <em>tikkun olam</em> (repairing the world) at the most fundamental level: healing the ground beneath our feet.</p>
+                
+                <p style="margin-top: 1rem;"><em>Bal tashchit</em> (do not destroy) calls us to stop wasting—no more plastic in landfills, no more depleting the soil. <em>Tzedek, tzedek tirdof</em> (justice, justice you shall pursue) means ensuring our most vulnerable community members have access to truly nourishing food, not just empty calories. And there's deep wisdom in letting the land rest and regenerate—we're learning to work with creation instead of exhausting it.</p>
+            </div>
+
+            <div class="narrative-section">
+                <h3>The Soil Reality</h3>
+                <p>Our soil is pretty much dead right now. Years of tilling and covering with plastic have left us with dirt that has almost no life in it. No worms, minimal microbes, poor structure. We've been repeating the same mistakes as modern industrial agriculture—fighting the soil, depleting it, treating it like dirt instead of a living system. Dead soil grows depleted food—the vegetables might look fantastic, but they're missing the vitamins and minerals people actually need.</p>
+                
+                <p style="margin-top: 1rem;">But here's our advantage: we're gardeners, not farmers. We don't need tractors or wide rows or chemical inputs. We have the opportunity to work with the soil and creation, not against it. The mulch-and-compost system we're transitioning to will wake the soil back up. This winter, we're mulching everything heavily so it composts in place by spring. Here's the critical part: the intensive square-foot spacing we're implementing will only work with living soil. You can't pack plants that densely into dead dirt. But in soil alive with microbes, fungi, and worms? Those organisms feed the plants and make intensive production possible. We get to do this right.</p>
+            </div>
+
+            <div class="narrative-section">
+                <h3>Year 2026: Full Implementation and Setup</h3>
+                <p>Picture this: All the beds are finally marked and measured. No more tilling (which moves the beds from season to season), no more wrestling with torn plastic sheeting stuck in the soil. The wood chip mulch is thick on every bed, green clover is spreading through the pathways. Cattle panels are standing vertical, ready for vines to climb. The software knows every bed measurement and volunteers are getting clear weekly schedules down to the exact number of seeds to start.</p>
+                
+                <p style="margin-top: 1rem;">The soil is starting to wake up—you can spot worms when you plant now. Water use is already dropping because the mulch holds moisture. The garden looks intentional, professional, organized. When those spring rains come? The mulch soaks it up. No mud, no waiting for the ground to dry so we can till. We just keep working.</p>
+            </div>
+
+            <div class="narrative-section">
+                <h3>Year 2027: Soil Biology Activates</h3>
+                <p>The garden is transforming. You can see the difference in the soil now—it's fluffy, dark, alive. Earthworms are everywhere. The mulch from last year has composted down beautifully into rich, dark soil and is replenished with fresh material to continue the process. The clover pathways are fully established and lush, pumping nitrogen into the ground.</p>
+                
+                <p style="margin-top: 1rem;">The cattle panel trellises are loaded with cucumbers and squash hanging at perfect harvest height—no more crawling around on hands and knees. Weeding? Almost none. The mulch and clover have it covered. We're using half the rainwater we used to need, reducing our dependence on the Temple water hose during drought. The plants look healthier—deeper green, more vigorous—because the soil biology is feeding them. You can taste the difference in the food.</p>
+                
+                <p style="margin-top: 1rem;">The soil stays cooler in the summer heat and warmer as fall hits—that biological activity is regulating temperature. We're testing hoop houses over a few beds to see if we can grow through winter. Weather isn't dictating our schedule anymore.</p>
+            </div>
+
+            <div class="narrative-section">
+                <h3>Year 2028 and Beyond: The Fungal Highway</h3>
+                <p>Walk through the garden now and it's hard to believe this is the same space. Three years of biological activity have created a soil ecosystem that runs itself. And here it is—this was my secret plan, my ultimate goal all along: underground, mycorrhizal fungal networks spreading across the entire garden connect the plant roots like a living highway system, pulling nitrogen from the clover pathways and delivering it directly to the crops in the beds. The clover is fixing nitrogen from the air, the fungi are trading it to the vegetables, and we're just... watching it happen. We're not fertilizing anymore. The system fertilizes itself.</p>
+                
+                <p style="margin-top: 1rem;">And when it rains? The water percolates through the composting mulch layer, creating a nutrient-rich tea that soaks into the soil. The earthworms and soil organisms distribute it everywhere as they move through their tunnels and burrows. Every rainfall is a feeding event. Every bit of biology is working together—fungi, bacteria, worms, insects—all cycling nutrients exactly where the plants need them. This is the perfect environment we've been building toward.</p>
+                
+                <p style="margin-top: 1rem;">The soil temperature stays moderated year-round—warmer in winter, cooler in summer. The hoop houses worked—we're producing food year-round now, greens and root vegetables all winter long. The produce coming out of these beds is packed with nutrients—you can see it in the color, taste it in the flavor. Vitamins and minerals that store-bought produce just doesn't have anymore. Our community members are eating food that actually nourishes them.</p>
+                
+                <p style="margin-top: 1rem;">The vertical trellises are producing more per square foot than we ever imagined. Labor is at an all-time low—no weeding, no tilling, no plastic hassles, no waiting around for dry weather, no fertilizing. We're using a fraction of the rainwater we used to. Disease and pest pressure are naturally down because healthy soil grows healthy plants. We're producing 3-4 times what we used to, more food than if we traditionally farmed land twice this size. <strong>The garden is feeding itself and feeding our community.</strong></p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="number">48-54k</div>
+                    <div class="label">lbs produce annually - with room to expand</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">Food Forest</div>
+                    <div class="label">in the surrounding tree line</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">Year-round</div>
+                    <div class="label">production with hoop houses</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">Zero-input</div>
+                    <div class="label">self-fertilizing system</div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- SQUADS -->
+        <div id="squads" class="tab-content">
+            <h2>🤝 Mitzvah Garden Volunteer Squads (Work in Progress)</h2>
+            
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #718096;">MGKC operates through a flexible, squad-based volunteer system designed to make Sunday work sessions accessible, organized, and enjoyable for volunteers of all skill levels. Rather than rigid assignments, volunteers can choose which squad to join each week based on their interests, energy level, and what sounds appealing.</p>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left-color: #1976d2; margin-bottom: 2rem;">
+                <h3 style="color: #1565c0; margin-top: 0;">How Our Squad System Works</h3>
+                <p style="margin-bottom: 10px;">Each squad is led by a <strong>Team Captain</strong>—a regular volunteer selected by the MGKC Director who has demonstrated relevant knowledge and can effectively guide groups of 5-10 volunteers. Team Captains are responsible for planning their squad's Sunday activities, either independently or in coordination with the Farm Coordinator, and ensuring their crew has clear direction and meaningful work.</p>
+                <p style="margin: 0;">The level of autonomy varies by squad: the Bloom Squad has significant creative freedom in designing ornamental plantings, the Garden Gang follows predetermined planting schedules managed through our garden planning software, and The Wild Things operate with substantial independence in forest cultivation projects—though final approval from the MGKC Director is required for all species removal or introduction.</p>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid #e0e0e0; margin: 3rem 0;">
+
+            <div class="initiative" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-left: 5px solid #9c27b0;">
+                <h3 style="color: #9c27b0;">🌸 Bloom Squad</h3>
+                <p style="margin-bottom: 10px;"><strong>Led by the Captain of Beautification</strong></p>
+                <p>The Bloom Squad maintains our ornamental gardens, flower beds, and pollinator-friendly plantings. This crew manages Lover's Lane—our extensive butterfly weed pathway established with hundreds of plants through a KU grant and local student assistance—along with seasonal color rotations and habitat creation for beneficial insects. Activities include maintaining Lover's Lane, deadheading spent blooms, mulching perennials, and identifying opportunities for new beautification projects. The Bloom Squad keeps our community space vibrant and welcoming throughout the seasons.</p>
+            </div>
+
+            <div class="initiative" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-left: 5px solid #558b2f;">
+                <h3 style="color: #558b2f;">🥬 Garden Gang</h3>
+                <p style="margin-bottom: 10px;"><strong>Led by the Farm Coordinator and assisted by our Sunday regulars</strong></p>
+                <p>The Garden Gang manages our fenced vegetable garden and wood chip bed systems. This crew handles seasonal planting, weeding, harvesting, and ongoing maintenance of our growing beds. We organize by <strong>Crop Captains</strong>—volunteers who take ownership of a specific crop (tomatoes, okra, greens, etc.) and commit to weekly maintenance. Whether you're interested in pruning tomato suckers, managing the okra harvest, or tending salad greens, the Garden Gang ensures our community has fresh, homegrown produce throughout the growing season. Activities range from preparing soil amendments to succession planting and daily harvest coordination.</p>
+            </div>
+
+            <div class="initiative" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-left: 5px solid #ff6f00;">
+                <h3 style="color: #e65100;">🍎 Tree Team</h3>
+                <p style="margin-bottom: 10px;"><strong>Led by our Orchard Steward</strong></p>
+                <p>The Tree Team is a smaller, specialized crew that oversees our fruit orchard, including pruning, pest management, harvesting, and propagation projects. This crew works with established fruit trees and develops new plantings through grafting and layering techniques. <strong>Major annual event:</strong> Our comprehensive fig maintenance day, which involves mulching hundreds of plants, harvesting leaves for teas and extracts, and conducting heavy pruning. Activities include learning proper pruning techniques for various fruit trees, propagating fig cuttings, and cultivating our long-term fruit production systems.</p>
+            </div>
+
+            <div class="initiative" style="background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); border-left: 5px solid #00695c;">
+                <h3 style="color: #00695c;">🌲 The Wild Things</h3>
+                <p style="margin-bottom: 10px;"><strong>Led by the Food Forest Steward • Requires experienced adult supervision</strong></p>
+                <div style="background: #fff3cd; border: 2px solid #ffc107; padding: 12px; border-radius: 6px; margin: 10px 0;">
+                    <p style="margin: 0; color: #856404;"><strong>⚠️ Safety Requirements:</strong> The Food Forest Steward must have demonstrated expertise in plant identification and foraging safety. This crew works with potentially hazardous plants including poison ivy and invasive species. Proper identification protocols and safety equipment are mandatory. All activities involving foraging education require verification by a qualified expert.</p>
+                </div>
+                <p style="margin-top: 10px;">The Wild Things focus on building a productive food forest in the land surrounding MGKC—creating a woodland ecosystem that yields thousands of pounds of edible nuts, berries, and seeds annually. This crew tackles invasive species removal, foraging education (under expert guidance), native plant cultivation, and the long-term establishment of a diverse perennial food system. Activities include identifying edible plants and mushrooms, managing invasive Bradford pears, planting berry bushes in the understory, and developing sustainable woodland cultivation practices that bridge wilderness and intentional agriculture.</p>
+            </div>
+
+            <div class="initiative" style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); border-left: 5px solid #c2185b;">
+                <h3 style="color: #c2185b;">📚 The Learning Garden</h3>
+                <p style="margin-bottom: 10px;"><strong>Managed by the Summer Intern under MGKC Director supervision</strong></p>
+                <p>The Learning Garden coordinates our high school volunteer program, greenhouse operations, and community tours. This crew of dedicated teen volunteers manages weekday greenhouse maintenance, serves as liaisons with our partner school, and facilitates educational experiences for visiting groups. <strong>Adult supervision required:</strong> All youth groups must be accompanied by a responsible adult chaperone. The Learning Garden ensures our space serves as a living classroom while developing the next generation of environmental stewards and community leaders.</p>
+            </div>
+
+            <div class="initiative" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-left: 5px solid #f57f17;">
+                <h3 style="color: #f57f17;">🌱 Sprout Crew</h3>
+                <p style="margin-bottom: 10px;"><strong>Managed by the Summer Intern under MGKC Director supervision</strong></p>
+                <p>The Sprout Crew welcomes ma'asim tovim campers, middle schoolers, Sunday school students, and visiting youth groups. <strong>Adult supervision required:</strong> All groups must be accompanied by a responsible adult chaperone. Under guidance from experienced volunteers, Sprouts gain hands-on experience across all garden areas—planting seeds, pulling weeds, harvesting vegetables, and learning where food comes from. The Sprout Crew brings energy, curiosity, and joy to our Sunday sessions while building foundational connections to food, nature, and community service.</p>
+            </div>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); border-left-color: #558b2f; margin-top: 3rem;">
+                <h3 style="color: #558b2f; margin-top: 0;">Join a Squad</h3>
+                <p style="margin: 0;">No long-term commitment required—simply arrive on Sunday mornings and choose which crew sounds most interesting that day. Every squad welcomes volunteers of all experience levels, and every contribution makes a meaningful difference. Whether you're an experienced gardener or have never worked with soil before, there's a place for you at Mitzvah Garden.</p>
+            </div>
+        </div>
+
+        <!-- GARDEN PLANNER TAB -->
+        <div id="garden-planner" class="tab-content">
+            <h2>Garden Planner</h2>
+            <p style="margin-bottom: 1rem;">Our very own MGKC Development Team (me) is custom building a garden planner tool specifically for use at MGKC. It will give us a weekly task breakdown from when to start harvesting to the amount of seeds to start. Saves locally to the browser, have fun!</p>
+            <iframe 
+                src="https://rhanns.github.io/2026planner/" 
+                width="100%" 
+                height="900px" 
+                frameborder="0"
+                style="border: 2px solid #558b2f; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            </iframe>
+            <p style="margin-top: 1rem; text-align: center; color: #689f38;">
+                <a href="https://rhanns.github.io/2026planner/" target="_blank" style="color: #558b2f; font-weight: 600;">
+                    🔗 Open planner in new tab
+                </a>
+            </p>
+        </div>
+
+        <!-- BREW LUNCH CALENDAR WITH MEAD RECIPES TAB -->
+        <div id="calendar" class="tab-content">
+            <h2>Brew Lunch Calendar & Mead Recipes</h2>
+            <p>12 meads following the Hebrew calendar, each made with garden fruit at peak season. Monthly Shabbat gatherings pair each mead with seasonal garden produce.</p>
+
+            <div class="stats" style="margin: 2rem 0;">
+                <div class="stat-box">
+                    <div class="number">12</div>
+                    <div class="label">Meads per year</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">42-45 lbs</div>
+                    <div class="label">Honey annually</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">70%</div>
+                    <div class="label">Garden-grown produce</div>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>October 2026 - Tishrei</h3>
+                <p class="date">Rosh Chodesh Tishrei (Rosh Hashanah): October 3-4, 2026</p>
+                <p><strong>Mead:</strong> Apple Mead (Cyser) "Shana Tova"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 0.33 gallons apple juice (4-5 apples)</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin D-47</p>
+                    <p><strong>Storage:</strong> Juice and freeze, or juice fresh on brew day</p>
+                    <p><strong>Notes:</strong> Semi-sweet, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Last tomatoes, winter squash, greens, apples (PEAK HARVEST!)</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Roasted root vegetables with apple cider glaze</li>
+                        <li>Butternut squash and apple soup</li>
+                        <li>Kugel (potato or noodle)</li>
+                    </ul>
+                    <p><em>Why it works: Rosh Hashanah comfort food. Sweet, warming, celebratory.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>November 2026 - Cheshvan</h3>
+                <p class="date">Rosh Chodesh Cheshvan: November 2, 2026</p>
+                <p><strong>Mead:</strong> Cherry Mead (Melomel) "The Bitter Month"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 1.5-2 lbs cherries (pitted weight)</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin 71B-1122</p>
+                    <p><strong>Storage:</strong> Pit, then juice or crush and freeze</p>
+                    <p><strong>Notes:</strong> Medium-sweet, 12-14% ABV, tannins mellow with age</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Late greens, stored squash, root vegetables</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Roasted Brussels sprouts with balsamic cherry glaze</li>
+                        <li>Wild rice pilaf with dried cherries</li>
+                        <li>Caramelized root vegetable gratin</li>
+                    </ul>
+                    <p><em>Why it works: Bittersweet cherry with bitter/sweet vegetables. Cozy, contemplative.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>December 2026 - Kislev</h3>
+                <p class="date">Rosh Chodesh Kislev: December 1-2, 2026</p>
+                <p><strong>Mead:</strong> Fig Mead (Melomel) "Eight Days"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 1-1.5 lbs figs</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin 71B-1122</p>
+                    <p><strong>Other:</strong> Juice of 1/2 lemon, 1/3 tsp acid blend</p>
+                    <p><strong>Storage:</strong> Freeze whole or dried</p>
+                    <p><strong>Notes:</strong> Rich, jammy, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Storage crops, greenhouse greens</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Roasted cauliflower with figs and tahini</li>
+                        <li>Latkes (Hanukkah!)</li>
+                        <li>Warm lentil salad with dried figs</li>
+                    </ul>
+                    <p><em>Why it works: Rich, dark flavors for long nights. Hanukkah fried foods need something sweet.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>January 2027 - Tevet</h3>
+                <p class="date">Rosh Chodesh Tevet: December 31, 2026</p>
+                <p><strong>Mead:</strong> Winter Spice Mead "Deep Winter"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Spices:</strong> Cinnamon sticks, cloves, star anise, dried orange peel</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin D-47</p>
+                    <p><strong>Notes:</strong> Warming, aromatic, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Stored produce, greenhouse lettuce</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Roasted winter vegetable medley</li>
+                        <li>Hearty lentil stew</li>
+                        <li>Braised cabbage</li>
+                    </ul>
+                    <p><em>Why it works: Warming spices for the coldest month. Comfort food.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>February 2026 - Shevat</h3>
+                <p class="date">Rosh Chodesh Shevat: January 30, 2026</p>
+                <p><strong>Mead:</strong> Mixed Berry Mead "Megillah Berry"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 2-3 lbs mixed berries (frozen works great)</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin 71B-1122</p>
+                    <p><strong>Storage:</strong> Freeze berries at peak ripeness</p>
+                    <p><strong>Notes:</strong> Tart, bright, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Stored root vegetables, winter greens</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Roasted beet and goat cheese salad</li>
+                        <li>Sweet potato and black bean tacos</li>
+                        <li>Caramelized onion tart</li>
+                    </ul>
+                    <p><em>Why it works: Berry tartness cuts through rich, sweet vegetables. Festive Purim energy.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>March 2026 - Adar II</h3>
+                <p class="date">Rosh Chodesh Adar II: March 21, 2026 (actual Purim month)</p>
+                <p><strong>Note:</strong> Skip Feb and just do this one, OR do both for extra bottles</p>
+                <p><strong>Mead:</strong> Mixed Berry Mead "Megillah Berry"</p>
+                <p><strong>Garden Harvest:</strong> First spring greens, radishes, green garlic</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Spring green salad with strawberry vinaigrette</li>
+                        <li>Radish crostini with herb butter</li>
+                        <li>Hamantaschen (obviously)</li>
+                    </ul>
+                    <p><em>Why it works: Fresh, bright flavors wake up winter palates. Purim feast vibes.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>April 2026 - Nisan</h3>
+                <p class="date">Rosh Chodesh Nisan: April 19-20, 2026</p>
+                <p><strong>Mead:</strong> Strawberry Mead "Spring of Freedom"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 2-3 lbs strawberries</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin 71B-1122</p>
+                    <p><strong>Storage:</strong> Freeze at peak ripeness</p>
+                    <p><strong>Notes:</strong> Light, sweet, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Lettuce, spinach, peas, early herbs (strawberries IN SEASON!)</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Pea shoots and snap peas with mint</li>
+                        <li>Spring herb frittata</li>
+                        <li>Matzah brei with strawberries (if during Pesach)</li>
+                    </ul>
+                    <p><em>Why it works: Light, fresh, celebratory. Spring's first sweetness.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>May 2026 - Iyar</h3>
+                <p class="date">Rosh Chodesh Iyar: May 19, 2026</p>
+                <p><strong>Mead:</strong> Peach Mead "Counting the Omer"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 2-3 lbs peaches</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin 71B-1122</p>
+                    <p><strong>Storage:</strong> Pit, slice, freeze</p>
+                    <p><strong>Notes:</strong> Stone fruit character, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Lettuce, arugula, radishes, early tomatoes</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Arugula salad with grilled peaches and burrata</li>
+                        <li>Spring vegetable stir-fry</li>
+                        <li>Herb-roasted new potatoes</li>
+                    </ul>
+                    <p><em>Why it works: Peppery greens contrast peach sweetness. Anticipation building toward Shavuot.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>June 2026 - Sivan</h3>
+                <p class="date">Rosh Chodesh Sivan: June 17-18, 2026</p>
+                <p><strong>Mead:</strong> Blackberry Mead "Mount Sinai"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 2-3 lbs blackberries</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin 71B-1122</p>
+                    <p><strong>Storage:</strong> Freeze at peak ripeness</p>
+                    <p><strong>Notes:</strong> Bold, complex, 13-15% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Tomatoes, cucumbers, summer squash, herbs (blackberries IN SEASON!)</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Caprese with garden tomatoes and basil</li>
+                        <li>Grilled zucchini with balsamic</li>
+                        <li>Blintzes or cheesecake (Shavuot dairy tradition)</li>
+                    </ul>
+                    <p><em>Why it works: Bold mead needs bold flavors. Rich dairy for Shavuot.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>July 2026 - Tammuz</h3>
+                <p class="date">Rosh Chodesh Tammuz: July 17, 2026</p>
+                <p><strong>Mead:</strong> Melon Mead "Tammuz Heat"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 3-4 lbs melon (cantaloupe or honeydew)</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin D-47</p>
+                    <p><strong>Storage:</strong> Puree and freeze in portions</p>
+                    <p><strong>Notes:</strong> Light, refreshing, 11-13% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Tomatoes, peppers, cucumbers, melons, basil (PEAK SEASON!)</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Cucumber salad with dill and yogurt</li>
+                        <li>Gazpacho</li>
+                        <li>Watermelon feta salad</li>
+                    </ul>
+                    <p><em>Why it works: Cooling foods for the hottest month. Light, refreshing, hydrating.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>August 2026 - Av</h3>
+                <p class="date">Rosh Chodesh Av: August 15-16, 2026</p>
+                <p><strong>Mead:</strong> Limonana Mead "Bitter and Bright"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Ingredients:</strong> Juice of 3-4 lemons, fresh mint</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin D-47</p>
+                    <p><strong>Notes:</strong> Bright, acidic, herbal, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Peak everything - tomatoes, peppers, eggplant, herbs (lemons & mint IN SEASON!)</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Grilled eggplant with lemon tahini</li>
+                        <li>Tabbouleh with lots of mint and parsley</li>
+                        <li>Shakshuka</li>
+                    </ul>
+                    <p><em>Why it works: Bright, acidic mead cuts through rich summer vegetables. Middle Eastern flavors.</em></p>
+                </div>
+            </div>
+
+            <div class="calendar-month">
+                <h3>September 2026 - Elul</h3>
+                <p class="date">Rosh Chodesh Elul: September 14, 2026</p>
+                <p><strong>Mead:</strong> Pear & Ginger Mead "Days of Awe"</p>
+                <div class="mead-details" style="background: #f1f8e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                    <p><strong>Fruit:</strong> 2-3 lbs pears</p>
+                    <p><strong>Spice:</strong> 1-2" fresh ginger, sliced</p>
+                    <p><strong>Honey:</strong> 3-4 lbs</p>
+                    <p><strong>Yeast:</strong> Lalvin D-47</p>
+                    <p><strong>Storage:</strong> Peel, core, freeze pears</p>
+                    <p><strong>Notes:</strong> Warming, contemplative, 12-14% ABV</p>
+                </div>
+                <p><strong>Garden Harvest:</strong> Fall crops starting - squash, peppers, late tomatoes (pears IN SEASON!)</p>
+                <div class="pairing-list">
+                    <strong>Pairing Suggestions:</strong>
+                    <ul>
+                        <li>Roasted butternut squash with ginger</li>
+                        <li>Stuffed peppers with wild rice</li>
+                        <li>Apple and pear slaw</li>
+                    </ul>
+                    <p><em>Why it works: Warming spice for cooling weather. Introspective flavors for Elul.</em></p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h4>The Taste of the Mitzvah Garden</h4>
+                <p>Each mead is brewed on Rosh Chodesh (the new moon) with fruit harvested at peak season from our garden or local sources. Monthly Shabbat gatherings bring the community together to taste each mead paired with seasonal garden produce. This creates a living calendar—connecting us to when foods are ready and how Jewish agricultural cycles tracked the seasons. <strong>Total honey needed: 42-45 lbs annually.</strong></p>
+            </div>
+        </div>
+
+        <!-- YELLOW FIG ROAD TAB -->
+        <div id="figs" class="tab-content">
+            <h2>Yellow Fig Road: Ben Yehuda Access Road</h2>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="number">500</div>
+                    <div class="label">Fig Trees by 2030</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">10,000</div>
+                    <div class="label">lbs/year at maturity</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">$0</div>
+                    <div class="label">Cost (using cuttings)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">$50,000</div>
+                    <div class="label">Annual retail value</div>
+                </div>
+            </div>
+
+            <h3>Goal</h3>
+            <p>Line Ben Yehuda access road with 500 Chicago Hardy fig trees to create food production corridor and visual landmark. By planting 500 trees to target 10,000 lbs annual production, we build in resilience against die-off, harsh winters, and natural losses.</p>
+
+            <h3>Why Figs?</h3>
+            <ul>
+                <li>Thrive on neglect and inconsistent watering</li>
+                <li>Drought-tolerant once established - minimal watering needed</li>
+                <li>No special soil requirements</li>
+                <li>75-85% success rate propagating from cuttings - can make 250+ clones from existing trees</li>
+                <li>Hardy to Zone 6, die back in winter but regrow from roots each spring</li>
+                <li>Mature Chicago Hardy figs yield 20-25 lbs per tree annually when properly pruned</li>
+                <li><strong>Resilience through numbers:</strong> Even with 10-15% tree loss, we still hit production targets</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h4>The Food Access Angle</h4>
+                <p>Fresh figs retail $4-6/lb but are nearly impossible to find in grocery stores because they don't ship well—they're too delicate. Food pantries never get figs. This is luxury produce that low-income families have zero access to. We're creating a pipeline for high-value, nutritionally dense fruit that would otherwise never reach food insecure communities.</p>
+            </div>
+
+            <h3>The Resilience Strategy</h3>
+            <p>We're planting 500 trees to produce 10,000 lbs—which means each mature tree only needs to produce 20 lbs annually (well below their 25-30 lb potential). This gives us a massive buffer:</p>
+            <ul>
+                <li><strong>Winter die-back:</strong> Even a brutal winter that kills 75-100 trees still leaves us at target production</li>
+                <li><strong>Disease/pest pressure:</strong> If a section gets hit, the rest carry the load</li>
+                <li><strong>Continuous replanting:</strong> We propagate 50-75 replacement trees annually to fill gaps</li>
+                <li><strong>Natural attrition:</strong> 10-15% expected losses are already baked into the plan</li>
+            </ul>
+
+
+            <h3>Distribution Impact</h3>
+            <p>At full production (2031+), 10,000 lbs feeds approximately:</p>
+            <ul>
+                <li><strong>2,500 families</strong> (4 lbs each) OR</li>
+                <li><strong>5,000 individuals</strong> (2 lbs each)</li>
+            </ul>
+            <p><strong>Harvest window:</strong> August-October, 6-8 weeks of weekly distribution</p>
+            <p><strong>Retail value equivalent:</strong> $40,000-60,000 (at $4-6/lb retail) annually in produce we're giving away for free</p>
+        </div>
+
+<!-- MITZVAH GARDEN AT HOME TAB -->
+        <div id="home-garden" class="tab-content">
+            <h2>🏡 Mitzvah Garden at Home</h2>
+            <p style="color: #718096; font-size: 1.1rem; margin-bottom: 2rem;">A blueprint for practicing Tikkun HaAdamah in your own space - we'll teach you the method, and you can load up buckets of compost and leaves when you volunteer.</p>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); border-left-color: #558b2f; margin-bottom: 2rem;">
+                <h3 style="color: #558b2f; margin-top: 0;">The Philosophy</h3>
+                <p style="margin-bottom: 10px;">You don't need 50 beds and 500 fig trees to practice Tikkun HaAdamah. <strong>Repairing the soil is repairing the world</strong> - and that starts wherever you are.</p>
+                <p style="margin-bottom: 10px;">This is a <em>blueprint</em> for how to apply MGKC's methods at home. Same wood chip mulch. Same leaf compost. Same living soil principles. Same Tikkun HaAdamah approach. We'll teach you the system, you source the materials.</p>
+                <p style="margin: 0;">Every tomato plant, every handful of compost, every earthworm is an act of tikkun olam. Start small. Start now. <strong>We'll help you get there.</strong></p>
+            </div>
+
+            <div><p>According to the (2009) <a href="https://gardenresearch.com/files/2009-Impact-of-Gardening-in-America-White-Paper.pdf" target="_blank">National Gardening Association</a>, the average home vegetable garden yields about $600 worth of produce while costing only $70 to maintain—that's an 8:1 return on investment. For a community garden feeding local food pantries, this means every dollar our volunteers put into their own gardens amplify their household savings, their overall nutrition, and we will GLADLY take your excess to be distributed to our community.</p></div>
+
+            <hr style="border: none; border-top: 2px solid #e0e0e0; margin: 3rem 0;">
+
+            <div id="balcony-garden">
+                <h3>🪴 Balcony/Patio Tikkun</h3>
+                <p style="margin-bottom: 20px;"><em>"I don't have land" is not an excuse. Containers can practice Tikkun HaAdamah too. Help your neighbors turn their balconies into an apartment grow co-op!</em></p>
+
+                <h4>The 5-Container Starter System</h4>
+                <p>Start with five 5-gallon containers - everything you need for fresh produce all summer:</p>
+
+                <div class="method-steps" style="background: #f9fbe7; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                    <div style="margin-bottom: 1rem;"><strong>1 Cherry Tomato</strong> - 5-gallon grow bag or pot, Sun Gold or Super Sweet 100, produces 100+ tomatoes</div>
+                    <div style="margin-bottom: 1rem;"><strong>1 Bell Pepper</strong> - 5-gallon container, your choice of variety, 8-12 peppers per plant</div>
+                    <div style="margin-bottom: 1rem;"><strong>1 Zucchini or Summer Squash</strong> - 5-gallon container, produces 15-25 squash</div>
+                    <div style="margin-bottom: 1rem;"><strong>1 Herb Container</strong> - Mix basil, parsley, cilantro in 5-gallon container</div>
+                    <div style="margin-bottom: 0;"><strong>1 Lettuce/Greens Container</strong> - Wide shallow container or 5-gallon, succession plant every 2 weeks</div>
+                </div>
+                <p style="margin: 15px 0;"><strong>Total first-year cost: $125-220</strong></p>
+                <p style="margin-bottom: 15px;"><strong>From MGKC:</strong> Load up buckets of compost when you volunteer (mix 30% into potting soil, side-dress monthly)</p>
+
+                <div class="highlight-box" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-left-color: #fbc02d; margin-top: 1.5rem;">
+                    <h4>🎯 Expected Yield</h4>
+                    <p><strong>30-40 lbs of produce worth $120-160 from a balcony.</strong> Keep what you need, bring surplus to MGKC when you volunteer.</p>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid #e0e0e0; margin: 3rem 0;">
+
+            <div id="backyard-garden">
+                <h3>🌱 Backyard 8×8 Tikkun HaAdamah</h3>
+                <p style="margin-bottom: 20px;"><strong>One 8×8 raised bed = 64 one-foot squares.</strong> Most squares grow vegetables using intensive square-foot spacing. "Cool" crops (carrots/spinach/lettuce) can be planted in spring and in fall for twice the harvest! A section in the middle grows native pollinator flowers. Frame optional but recommended for aesthetics.</p>
+
+                <h4>The 8×8 Layout</h4>
+                <p style="margin-bottom: 15px;">This is our basic template and what will be built this 2026 at MGKC for an example garden - vegetables fill most squares with a pollinator flower section in the middle. This is only to show what is possible, obviously any layout or plant combination will work here.</p>
+
+                <!-- Garden Visual Layout - FIXED BOTTOM ROW -->
+                <div style="background: #8b6f47; padding: 20px; border-radius: 10px; margin: 2rem 0;">
+                    <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; background: #654321; padding: 4px; border: 3px solid #654321;">
+                        <!-- Row 1 -->
+                        <div style="aspect-ratio: 1; background: #2d6a4f; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Spinach</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #52b788; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Lettuce</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #52b788; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Lettuce</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #52b788; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Lettuce</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #52b788; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Lettuce</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #2d6a4f; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Spinach</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        
+                        <!-- Row 2 - 2x2 PEA BLOCK continues -->
+                        <div style="aspect-ratio: 1; background: #d62828; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Radish</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #c73e1d; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Tomato</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #5f7d3e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Beans</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #ff9500; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Carrots</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #c73e1d; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Tomato</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #d62828; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Radish</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        
+                        <!-- Row 3 -->
+                        <div style="aspect-ratio: 1; background: #dda15e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Onions</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #5f7d3e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Beans</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Coreopsis</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Coneflower</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Gaillardia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Zinnia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">mix</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #ff9500; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Carrots</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #dda15e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Onions</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        
+                        <!-- Row 4 -->
+                        <div style="aspect-ratio: 1; background: #90be6d; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Cucumber</div>
+                            <div style="font-size: 11px; margin-top: 3px;">2 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #ff6b35; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Pepper</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Gaillardia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Zinnia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">mix</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Sunflower</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Coreopsis</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #ff6b35; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Pepper</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #6b8e23; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Zucchini</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        
+                        <!-- Row 5 -->
+                        <div style="aspect-ratio: 1; background: #90be6d; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Cucumber</div>
+                            <div style="font-size: 11px; margin-top: 3px;">2 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #ff6b35; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Pepper</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Zinnia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">mix</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Coreopsis</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Aster</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Gaillardia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #ff6b35; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Pepper</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #6b8e23; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Zucchini</div>
+                            <div style="font-size: 11px; margin-top: 3px;">1 plant</div>
+                        </div>
+                        
+                        <!-- Row 6 -->
+                        <div style="aspect-ratio: 1; background: #dda15e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Onions</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #5f7d3e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Beans</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Sunflower</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Zinnia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">mix</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Zinnia</div>
+                            <div style="font-size: 10px; margin-top: 2px;">mix</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #e9edc9; color: #6b705c; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 11px;">Coreopsis</div>
+                            <div style="font-size: 10px; margin-top: 2px;">native</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #5f7d3e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Beans</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #dda15e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Onions</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        
+                        <!-- Row 7 - 2x2 PEA BLOCK starts at bottom -->
+                        <div style="aspect-ratio: 1; background: #8e7cc3; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Basil</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #d62828; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Radish</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #5f7d3e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Beans</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #90be6d; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Cucumber</div>
+                            <div style="font-size: 11px; margin-top: 3px;">2 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #d62828; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Radish</div>
+                            <div style="font-size: 11px; margin-top: 3px;">16 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #8e7cc3; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Basil</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        
+                        <!-- Row 8 - FIXED with veggies only -->
+                        <div style="aspect-ratio: 1; background: #8e7cc3; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Cilantro</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #2d6a4f; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Spinach</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #52b788; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Lettuce</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #a7c957; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Peas</div>
+                            <div style="font-size: 11px; margin-top: 3px;">8 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #52b788; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Lettuce</div>
+                            <div style="font-size: 11px; margin-top: 3px;">4 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #2d6a4f; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 13px;">Spinach</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                        <div style="aspect-ratio: 1; background: #8e7cc3; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; padding: 4px; text-align: center; border-radius: 3px;">
+                            <div style="font-weight: bold; font-size: 12px;">Cilantro</div>
+                            <div style="font-size: 11px; margin-top: 3px;">9 plants</div>
+                        </div>
+                    </div>
+                    <p style="color: white; text-align: center; margin-top: 1rem; font-size: 1rem;">Most squares = vegetables. Pollinator flowers in middle section.</p>
+                </div>
+
+                <h4>Square-Foot Planting Density</h4>
+                <p style="margin-bottom: 10px;">This is how many plants fit in each 1-foot square:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Crop</th>
+                            <th>Plants per Square</th>
+                            <th>In This Layout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Lettuce</td><td>4 plants</td><td>5 squares</td></tr>
+                        <tr><td>Spinach</td><td>9 plants</td><td>4 squares</td></tr>
+                        <tr><td>Radishes</td><td>16 plants</td><td>4 squares</td></tr>
+                        <tr><td>Carrots</td><td>16 plants</td><td>2 squares</td></tr>
+                        <tr><td>Green onions</td><td>16 plants</td><td>4 squares</td></tr>
+                        <tr><td>Peas (trellis)</td><td>8 plants</td><td>6 squares</td></tr>
+                        <tr><td>Bush beans</td><td>9 plants</td><td>4 squares</td></tr>
+                        <tr><td>Basil</td><td>4 plants</td><td>2 squares</td></tr>
+                        <tr><td>Cilantro</td><td>9 plants</td><td>2 squares</td></tr>
+                        <tr><td>Tomatoes (caged)</td><td>1 plant</td><td>2 squares</td></tr>
+                        <tr><td>Peppers</td><td>1 plant</td><td>4 squares</td></tr>
+                        <tr><td>Zucchini</td><td>1 plant</td><td>2 squares</td></tr>
+                        <tr><td>Cucumbers (trellis)</td><td>2 plants</td><td>3 squares</td></tr>
+                        <tr style="background: #f9fbe7;">
+                            <td colspan="3"><strong>Pollinator flowers - mix natives: sunflower, coneflower, coreopsis, gaillardia, aster, zinnia</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>What You Need to Source</h4>
+                <table style="margin-top: 1.5rem;">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Where to Get It</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Frame lumber (optional)</td>
+                            <td>Home Depot, Lowe's</td>
+                            <td>$60-100</td>
+                        </tr>
+                        <tr>
+                            <td>Soil (~32 cubic feet)</td>
+                            <td>Soil3, landscape supply, OR chip-fill method</td>
+                            <td>$100-150 (or free)</td>
+                        </tr>
+                        <tr>
+                            <td>Wood chip mulch</td>
+                            <td><strong>ChipDrop.com</strong> - sign up yourself</td>
+                            <td>FREE</td>
+                        </tr>
+                        <tr>
+                            <td>Seeds & transplants</td>
+                            <td>Buy seeds online/local. Check MGKC for extra starts.</td>
+                            <td>$30-60</td>
+                        </tr>
+                        <tr>
+                            <td>Cages, trellises</td>
+                            <td>Home Depot, Facebook Marketplace</td>
+                            <td>$30-50</td>
+                        </tr>
+                        <tr style="background: #c8e6c9;">
+                            <td colspan="3"><strong>TOTAL: $220-360</strong> (or $60-210 with free soil method)</td>
+                        </tr>
+                        <tr style="background: #f9fbe7;">
+                            <td colspan="3"><strong>FROM MGKC:</strong> Load buckets of compost when you volunteer. Extra starts if we have them. Guidance.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-left-color: #fbc02d; margin: 2rem 0;">
+                    <h4>🎯 Expected Yield</h4>
+                    <p><strong>One 8×8 bed = 150-250 lbs annually = $600-1,000 grocery savings.</strong> Keep what you need, bring surplus to MGKC when you volunteer.</p>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid #e0e0e0; margin: 3rem 0;">
+
+            <div id="full-yard">
+                <h3>🌾 Multiple Beds</h3>
+                <p style="margin-bottom: 20px;">Scale it up: Arrange your 8×8 beds in a 4×4 grid pattern (or whatever fits your space). Use the same basic template above or customize each bed. Put clover or mulch in between beds as pathways.</p>
+
+                <div class="stats" style="margin: 2rem 0;">
+                    <div class="stat-box"><div class="number">2 beds</div><div class="label">300-500 lbs/year</div></div>
+                    <div class="stat-box"><div class="number">3 beds</div><div class="label">450-750 lbs/year</div></div>
+                    <div class="stat-box"><div class="number">4 beds</div><div class="label">600-1,000 lbs/year</div></div>
+                </div>
+
+                <p style="margin-bottom: 15px;"><strong>The math:</strong> Each bed adds 150-250 lbs production. Multiply costs accordingly. Sign up for ChipDrop once, load more buckets of compost when you volunteer, buy more seeds/plants.</p>
+
+                <p style="margin-bottom: 15px;"><strong>Layout options:</strong> With frames (clean, organized, $60-100 per bed for lumber). Without frames (save money, just keep edges tidy). 2-3 feet between beds for pathways.</p>
+
+                <div class="highlight-box" style="background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); border-left-color: #558b2f;">
+                    <p style="margin: 0;"><strong>By Year 3:</strong> Living soil, earthworms everywhere, mycorrhizal networks underground, stopped buying most vegetables, freezer full, giving food away. This is Tikkun HaAdamah at scale.</p>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid #e0e0e0; margin: 3rem 0;">
+
+
+
+            <div class="highlight-box" style="margin-top: 3rem; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-left-color: #ff6f00;">
+                <h4 style="color: #e65100; margin-top: 0;">The "Tithe" Exception</h4>
+                <p style="margin: 0;"><strong>IF you're serious about donating significant surplus back to MGKC and boosting our distribution numbers,</strong> we might be able to help with larger-scale delivery of wood chips or compost. But generally: you source your materials, we teach the method and share what we can when you volunteer.</p>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 2rem; background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); border-left-color: #558b2f;">
+                <h3 style="margin-top: 0; color: #558b2f;">Start Now</h3>
+                <p style="margin: 0;"><strong>This week:</strong> Contact MGKC, measure your space. <strong>This month:</strong> Sign up for ChipDrop, order seeds. <strong>Winter:</strong> Build beds, accumulate materials. <strong>Spring:</strong> Plant, grow, share.</p>
+            </div>
+        </div>
+
+        <!-- KNOWLEDGE BASE TAB -->
+        <div id="knowledge-base" class="tab-content">
+            <div class="kb-layout">
+                <nav class="kb-sidebar">
+                    <div class="kb-accordion-section">
+                        <div class="kb-accordion-header active" onclick="toggleAccordion(this)">
+                            <span>Legumes</span>
+                            <span class="kb-accordion-icon">▶</span>
+                        </div>
+                        <div class="kb-accordion-content active">
+                            <a class="kb-nav-link active" data-page="kb-beans">Beans (Pole, Bush, Dry)</a>
+                            <a class="kb-nav-link" data-page="kb-peas">Peas</a>
+                            <a class="kb-nav-link" data-page="kb-southern-peas">Southern Peas</a>
+                        </div>
+                    </div>
+
+                    <div class="kb-accordion-section">
+                        <div class="kb-accordion-header" onclick="toggleAccordion(this)">
+                            <span>Fruiting Plants</span>
+                            <span class="kb-accordion-icon">▶</span>
+                        </div>
+                        <div class="kb-accordion-content">
+                            <a class="kb-nav-link" data-page="kb-tomatoes">Tomatoes</a>
+                            <a class="kb-nav-link" data-page="kb-peppers">Peppers</a>
+                            <a class="kb-nav-link" data-page="kb-eggplant">Eggplant</a>
+                        </div>
+                    </div>
+
+                    <div class="kb-accordion-section">
+                        <div class="kb-accordion-header" onclick="toggleAccordion(this)">
+                            <span>Cucurbits</span>
+                            <span class="kb-accordion-icon">▶</span>
+                        </div>
+                        <div class="kb-accordion-content">
+                            <a class="kb-nav-link" data-page="kb-squash">Squash</a>
+                            <a class="kb-nav-link" data-page="kb-cucumbers">Cucumbers</a>
+                            <a class="kb-nav-link" data-page="kb-melons">Melons</a>
+                            <a class="kb-nav-link" data-page="kb-pumpkins">Pumpkins</a>
+                        </div>
+                    </div>
+
+                    <div class="kb-accordion-section">
+                        <div class="kb-accordion-header" onclick="toggleAccordion(this)">
+                            <span>Brassicas</span>
+                            <span class="kb-accordion-icon">▶</span>
+                        </div>
+                        <div class="kb-accordion-content">
+                            <a class="kb-nav-link" data-page="kb-broccoli">Broccoli</a>
+                            <a class="kb-nav-link" data-page="kb-cabbage">Cabbage</a>
+                            <a class="kb-nav-link" data-page="kb-kale">Kale</a>
+                            <a class="kb-nav-link" data-page="kb-cauliflower">Cauliflower</a>
+                        </div>
+                    </div>
+
+                    <div class="kb-accordion-section">
+                        <div class="kb-accordion-header" onclick="toggleAccordion(this)">
+                            <span>Greens & Roots</span>
+                            <span class="kb-accordion-icon">▶</span>
+                        </div>
+                        <div class="kb-accordion-content">
+                            <a class="kb-nav-link" data-page="kb-lettuce">Lettuce & Salad Greens</a>
+                            <a class="kb-nav-link" data-page="kb-carrots">Carrots</a>
+                            <a class="kb-nav-link" data-page="kb-beets">Beets</a>
+                            <a class="kb-nav-link" data-page="kb-onions">Onions & Garlic</a>
+                            <a class="kb-nav-link" data-page="kb-potatoes">Potatoes</a>
+                        </div>
+                    </div>
+
+                    <div class="kb-accordion-section">
+                        <div class="kb-accordion-header" onclick="toggleAccordion(this)">
+                            <span>Other Crops</span>
+                            <span class="kb-accordion-icon">▶</span>
+                        </div>
+                        <div class="kb-accordion-content">
+                            <a class="kb-nav-link" data-page="kb-corn">Corn</a>
+                            <a class="kb-nav-link" data-page="kb-strawberries">Strawberries</a>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="kb-content">
+                    <!-- BEANS PAGE -->
+                    <div id="kb-beans" class="kb-page active">
+                        <h2>🫘 Beans: Pole, Bush & Dry</h2>
+                        <p style="margin-bottom: 2rem; color: #718096;">Our complete bean growing operation for fresh and dried donations</p>
+
+                        <div class="kb-stats-bar">
+                            <div class="kb-stat">
+                                <span class="kb-stat-number">~296</span>
+                                <span class="kb-stat-label">Pole Bean Plants</span>
+                            </div>
+                            <div class="kb-stat">
+                                <span class="kb-stat-number">~900</span>
+                                <span class="kb-stat-label">Bush Bean Plants</span>
+                            </div>
+                            <div class="kb-stat">
+                                <span class="kb-stat-number">~1,196</span>
+                                <span class="kb-stat-label">Total Bean Plants</span>
+                            </div>
+                        </div>
+
+                        <h3>Overview & Strategy</h3>
+                        <p style="margin-bottom: 20px;">We grow three types of beans for different pantry needs: pole beans for continuous fresh harvest along our fence line, bush beans for fresh green beans in beds, and dry beans for shelf-stable protein. This combination provides both immediate fresh produce and long-term food security.</p>
+                        
+                        <div class="kb-info-grid">
+                            <div class="kb-info-card">
+                                <h4>Pole Beans (Fresh)</h4>
+                                <p><strong>Location:</strong> 148ft fence line<br>
+                                <strong>Spacing:</strong> 2 plants per linear foot<br>
+                                <strong>Total:</strong> ~296 plants<br>
+                                <strong>Yield:</strong> 5-8 lbs per plant = 1,480-2,368 lbs</p>
+                            </div>
+                            <div class="kb-info-card">
+                                <h4>Bush Beans (Fresh)</h4>
+                                <p><strong>Location:</strong> 4 sq ft at end of 25 rows<br>
+                                <strong>Spacing:</strong> 9 plants per sq ft<br>
+                                <strong>Total:</strong> ~900 plants<br>
+                                <strong>Yield:</strong> 0.5-1 lb per plant = 450-900 lbs</p>
+                            </div>
+                            <div class="kb-info-card">
+                                <h4>Dry Beans (Storage)</h4>
+                                <p><strong>Option:</strong> Convert half bush beans to dry<br>
+                                <strong>Plants:</strong> ~450 for dry beans<br>
+                                <strong>Yield:</strong> 0.25-0.5 lbs per plant = ~157 lbs dried<br>
+                                <strong>Impact:</strong> 700-800 cups shelf-stable protein</p>
+                            </div>
+                        </div>
+
+                        <h3>Recommended Varieties</h3>
+                        
+                        <h4>Pole Beans (Fresh Green Beans)</h4>
+                        <div class="kb-variety-list">
+                            <div class="kb-variety-item">
+                                <strong>Provider</strong>
+                                <span>Heavy producer, 60-70 days</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Kentucky Wonder</strong>
+                                <span>Classic variety, 65 days</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Fortex</strong>
+                                <span>Long pods, excellent flavor</span>
+                            </div>
+                        </div>
+
+                        <h4>Bush Beans (Fresh Green Beans)</h4>
+                        <div class="kb-variety-list">
+                            <div class="kb-variety-item">
+                                <strong>Provider</strong>
+                                <span>50 days, most popular</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Contender</strong>
+                                <span>Early, reliable producer</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Jade</strong>
+                                <span>High quality, disease resistant</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Blue Lake</strong>
+                                <span>55 days, classic variety</span>
+                            </div>
+                        </div>
+
+                        <h4>Dry Beans (Shelf-Stable)</h4>
+                        <div class="kb-variety-list">
+                            <div class="kb-variety-item">
+                                <strong>Black Turtle</strong>
+                                <span>90-100 days, bulletproof</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Pinto (Othello/Lariat)</strong>
+                                <span>Classic, high-yield</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Navy/Great Northern</strong>
+                                <span>Versatile pantry bean</span>
+                            </div>
+                            <div class="kb-variety-item">
+                                <strong>Cranberry</strong>
+                                <span>Beautiful and delicious</span>
+                            </div>
+                        </div>
+
+                        <h3>Planting Schedule</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bean Type</th>
+                                    <th>Planting Window</th>
+                                    <th>Days to Harvest</th>
+                                    <th>Harvest Window</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Pole Beans (Fresh)</strong></td>
+                                    <td>April 15 - May 20</td>
+                                    <td>60-70 days</td>
+                                    <td>Mid-June through frost (continuous)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bush Beans (Fresh)</strong></td>
+                                    <td>April 15 - May 20<br><em>Optional 2nd: Early June</em></td>
+                                    <td>50-60 days</td>
+                                    <td>Early June - July<br><em>2nd crop: Late July - Aug</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dry Beans</strong></td>
+                                    <td>April 15 - May 20</td>
+                                    <td>90-120 days</td>
+                                    <td>Late July - September</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Expected Yields & Impact</h3>
+                        <div class="highlight-box">
+                            <strong>Fresh Green Beans (Pole + Bush)</strong>
+                            <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+                                <li>Pole beans: 1,480-2,368 lbs</li>
+                                <li>Bush beans: 450-900 lbs</li>
+                                <li><strong>Total fresh: 1,930-3,268 lbs</strong></li>
+                                <li>At 4 servings per pound = <strong>7,720-13,072 servings</strong></li>
+                            </ul>
+                        </div>
+
+                        <div class="highlight-box" style="background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); border-left-color: #558b2f;">
+                            <strong style="color: #558b2f;">Dried Beans (If converting half bush beans)</strong>
+                            <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+                                <li>~157 lbs dried beans (from 450 plants)</li>
+                                <li>= 700-800 cups dried beans</li>
+                                <li>Way more shelf-stable protein value than fresh equivalent!</li>
+                                <li><strong>Major pantry impact:</strong> Long-term food security</li>
+                            </ul>
+                        </div>
+
+                        <h3>Care & Maintenance</h3>
+                        <div class="kb-info-grid">
+                            <div class="kb-info-card">
+                                <h4>Watering</h4>
+                                <p>1 inch per week, consistent moisture. CRITICAL during flowering and pod development. Mulch to retain moisture.</p>
+                            </div>
+                            <div class="kb-info-card">
+                                <h4>Fertilizing</h4>
+                                <p>Beans fix their own nitrogen! Light compost at planting is enough. Don't over-fertilize or you'll get leaves, not beans.</p>
+                            </div>
+                            <div class="kb-info-card">
+                                <h4>Pest Management</h4>
+                                <p>Watch for Mexican bean beetles and aphids. Hand-pick beetles. Neem oil for aphids if needed. Good airflow prevents disease.</p>
+                            </div>
+                            <div class="kb-info-card">
+                                <h4>Harvest Tips</h4>
+                                <p>Pick in morning when pods are crisp. For fresh beans: harvest young and tender. For dry: let fully mature on plant.</p>
+                            </div>
+                        </div>
+
+                        <h3>Food Pantry Notes</h3>
+                        <div class="kb-method-steps">
+                            <ul style="list-style-type: disc; margin-left: 20px;">
+                                <li><strong>Fresh beans:</strong> Best donated within 24-48 hours of harvest. Keep cool and dry.</li>
+                                <li><strong>Dried beans:</strong> Store in sealed containers. Label with variety and harvest date. Shelf life of 1-2 years.</li>
+                                <li><strong>Presentation:</strong> Fresh beans look great in baskets. Dried beans can be portioned into bags with cooking instructions.</li>
+                                <li><strong>Why both?</strong> Fresh provides immediate nutrition. Dried provides long-term protein and food security.</li>
+                                <li><strong>Value:</strong> Dry beans are MORE valuable per pound to pantries than fresh equivalent!</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- TEMPLATE PAGES -->
+                    <div id="kb-peas" class="kb-page"><div class="coming-soon"><h3>🫛 Peas</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-southern-peas" class="kb-page"><div class="coming-soon"><h3>Southern Peas</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-tomatoes" class="kb-page"><div class="coming-soon"><h3>🍅 Tomatoes</h3><p>Coming soon - including our sucker pruning method!</p></div></div>
+                    <div id="kb-peppers" class="kb-page"><div class="coming-soon"><h3>🌶️ Peppers</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-eggplant" class="kb-page"><div class="coming-soon"><h3>🍆 Eggplant</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-squash" class="kb-page"><div class="coming-soon"><h3>Squash</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-cucumbers" class="kb-page"><div class="coming-soon"><h3>🥒 Cucumbers</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-melons" class="kb-page"><div class="coming-soon"><h3>🍉 Melons</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-pumpkins" class="kb-page"><div class="coming-soon"><h3>🎃 Pumpkins</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-broccoli" class="kb-page"><div class="coming-soon"><h3>🥦 Broccoli</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-cabbage" class="kb-page"><div class="coming-soon"><h3>Cabbage</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-kale" class="kb-page"><div class="coming-soon"><h3>🥬 Kale</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-cauliflower" class="kb-page"><div class="coming-soon"><h3>Cauliflower</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-lettuce" class="kb-page"><div class="coming-soon"><h3>🥬 Lettuce & Salad Greens</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-carrots" class="kb-page"><div class="coming-soon"><h3>🥕 Carrots</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-beets" class="kb-page"><div class="coming-soon"><h3>Beets</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-onions" class="kb-page"><div class="coming-soon"><h3>🧅 Onions & Garlic</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-potatoes" class="kb-page"><div class="coming-soon"><h3>🥔 Potatoes</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-corn" class="kb-page"><div class="coming-soon"><h3>🌽 Corn</h3><p>Coming soon!</p></div></div>
+                    <div id="kb-strawberries" class="kb-page"><div class="coming-soon"><h3>🍓 Strawberries</h3><p>Coming soon!</p></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Main tab navigation
+        function openTab(tabName, event) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // Fallback if event not passed
+                document.querySelector(`[onclick*="${tabName}"]`).classList.add('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Knowledge base accordion
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+            
+            // Close all accordions
+            document.querySelectorAll('.kb-accordion-header').forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.kb-accordion-content').forEach(c => c.classList.remove('active'));
+            
+            // Open clicked accordion if it wasn't active
+            if (!isActive) {
+                header.classList.add('active');
+                content.classList.add('active');
+            }
+        }
+
+        // Knowledge base navigation
+        document.querySelectorAll('.kb-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links and pages
+                document.querySelectorAll('.kb-nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.kb-page').forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Show corresponding page
+                const pageId = this.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+                
+                // Scroll to top of content area
+                document.querySelector('.kb-content').scrollTop = 0;
+            });
+        });
+    </script>
+</body>
+</html>
